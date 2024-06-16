@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main-Menu.unity
     guid: 9600795ce11bb854ea0759d86d0e9dc8
   - enabled: 1
-    path: Assets/Scenes/Card-Select-Scene.unity
+    path: Assets/Scenes/PowerUp-Select-Scene.unity
     guid: dfd9b98ed0e201046a6f74f1680c4a6a
   - enabled: 1
     path: Assets/Scenes/Main-Scene.unity

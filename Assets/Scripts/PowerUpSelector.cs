@@ -6,11 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class PowerUpSelector : MonoBehaviour
 {
-    public List<Button> powerUpButtons;
-    private List<string> selectedPowerUps = new List<string>();
+    private List<string> _selectedPowerUps = new List<string>();
     private int maxSelection = 3;
+
+    public List<Button> powerUpButtons;
     public TextMeshProUGUI feedbackText;
-    Scene _currentScene;
+
+    private Scene _currentScene;
+
+    private void Awake()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 
     void Start()
     {
@@ -26,35 +33,60 @@ public class PowerUpSelector : MonoBehaviour
     {
         string powerUpName = button.GetComponentInChildren<TextMeshProUGUI>().text;
 
-        if (selectedPowerUps.Contains(powerUpName))
+        if (_selectedPowerUps.Contains(powerUpName))
         {
-            selectedPowerUps.Remove(powerUpName);
+            _selectedPowerUps.Remove(powerUpName);
             button.GetComponent<Image>().color = Color.white; // Deselect
             feedbackText.text = ""; // Clear feedback
         }
         else
         {
-            if (selectedPowerUps.Count < maxSelection)
+            if (_selectedPowerUps.Count < maxSelection)
             {
-                selectedPowerUps.Add(powerUpName);
+                _selectedPowerUps.Add(powerUpName);
                 button.GetComponent<Image>().color = Color.green; // Select
                 feedbackText.text = ""; // Clear feedback
             }
             else
             {
-                feedbackText.text = "You can only select up to " + maxSelection + " power-ups.";
+                feedbackText.text = "You must select " + maxSelection + " power-ups.";
             }
         }
 
-        Debug.Log("Selected Power-Ups: " + string.Join(", ", selectedPowerUps));
+        Debug.Log("Selected Power-Ups: " + string.Join(", ", _selectedPowerUps));
+    }
+
+    public void SaveSelectedPowerUps()
+    {
+        PlayerPrefs.SetString("powerUps", _selectedPowerUps.ToString());
     }
 
     public void LoadNextScene()
     {
-        if (feedbackText.text == "")
+        /// if the current scene is not the powerup slect scene, 
+        if (_currentScene.name != "PowerUp-Select-Scene")
         {
-            int nextSceneIndex = (_currentScene.buildIndex + 1) % SceneManager.sceneCount;
+
+            ///     if there is a scene to move to
+            ///         move to the next scene
+            int nextSceneIndex = _currentScene.buildIndex + 1;
             SceneManager.LoadScene(nextSceneIndex, LoadSceneMode.Single);
+        }
+        else
+        {
+            /// else, do these checks
+            if (_selectedPowerUps.Count < 3)
+            {
+                feedbackText.text = "You must select " + maxSelection + " power-ups.";
+                return;
+            }
+
+            if (feedbackText.text == "")
+            {
+                SaveSelectedPowerUps();
+                int nextSceneIndex = _currentScene.buildIndex + 1;
+                SceneManager.LoadScene(nextSceneIndex, LoadSceneMode.Single);
+            }
         }
     }
 }
