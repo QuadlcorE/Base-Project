@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private string[] _selectedPowerUps;
 
     private static GameManager _instance;
 
@@ -44,26 +43,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        _selectedPowerUps = PlayerPrefs.GetString("powerUps").Split(',');
     }
 
-    void Start()
-    {
-        if (_selectedPowerUps.Length == 0 || _selectedPowerUps is null)
-        {
-            Debug.LogError("_selectedPowerUps is null");
-        }
-        if (_selectedPowerUps.Length > 0)
-        {
-            Debug.Log("PowerUps successfully loaded from PlayerPrefs ");
-            foreach (var item in _selectedPowerUps)
-            {
-                Debug.Log(item);
-            }
-        }
-
-    }
 
     public void GoToNextScene()
     {
