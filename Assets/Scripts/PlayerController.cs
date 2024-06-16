@@ -1,16 +1,91 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class PlayerController: MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
+    /// <summary>
+    /// Player speed
+    /// </summary>
     [SerializeField] float speed = 5;
 
-    Vector3 turn;
+    /// <summary>
+    /// 2D Vector containing the mouse x and y axes
+    /// </summary>
+    private Vector3 turn;
+
+    /// <summary>
+    /// Checks if the player has the turet powerup
+    /// </summary>
+    private bool _hasTuret;
+
+    /// <summary>
+    /// Checks if the player has the juggernaut powerup
+    /// </summary>
+    private bool _hasJuggernaut;
+
+    /// <summary>
+    /// Checks if the player has the canon powerup
+    /// </summary>
+    private bool _hasCanon;
+
+    /// <summary>
+    /// Checks if the player has quick regenerative powers
+    /// </summary>
+    private bool _hasRegen;
+
+    /// <summary>
+    /// Checks if the player has the dropbox powerup
+    /// </summary>
+    private bool _hasDropBox;
+
+    /// <summary>
+    /// Reference to the PowerUp Manager script on the Player prefab
+    /// </summary>
+    private PowerUpManager _powerUpManager;
+
+    private string[] _selectedPowerUps;
 
     // Start is called before the first frame update
     void Start()
     {
+        _powerUpManager = GetComponent<PowerUpManager>();
+
+        if (_powerUpManager != null)
+        {
+            _selectedPowerUps = _powerUpManager.GetPowerUps();
+            
+            if (_selectedPowerUps.Contains("Turet"))
+            {
+                _hasTuret = true;
+            }
+
+            if (_selectedPowerUps.Contains("Juggernaut"))
+            {
+                _hasJuggernaut = true;
+            }
+
+            if (_selectedPowerUps.Contains("Canon"))
+            {
+                _hasCanon = true;
+            }
+
+            if (_selectedPowerUps.Contains("Regen"))
+            {
+                _hasRegen = true;
+            }
+
+            if (_selectedPowerUps.Contains("Drop Box"))
+            {
+                _hasDropBox = true;
+            }
+        }
+        else
+        {
+            Debug.LogError("Powerup Manager script is null");
+        }
+
 
     }
 

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PowerUpManager : MonoBehaviour
 {
-
+    /// <summary>
+    /// Array containing the powerups that the player has selected.
+    /// </summary>
     private string[] _selectedPowerUps;
 
     private void Awake()
@@ -30,9 +32,8 @@ public class PowerUpManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    public string[] GetPowerUps()
     {
-
+        return _selectedPowerUps;
     }
 }
