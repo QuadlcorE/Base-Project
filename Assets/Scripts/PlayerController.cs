@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     /// <summary>
-    /// Maximum ppossible health for player
+    /// Maximum possible health for player
     /// </summary>
     public const int MaxHealth = 100;
 
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Player speed
     /// </summary>
-    [SerializeField] float _speed = 5;
+    [SerializeField] private float _speed = 5;
 
     /// <summary>
     /// 2D Vector containing the mouse x and y axes
@@ -57,10 +57,9 @@ public class PlayerController : MonoBehaviour
 
     private string[] _selectedPowerUps;
 
-    [SerializeField] Projectile _projectile;
+    [SerializeField] private Projectile _projectile;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _health = MaxHealth;
 
@@ -102,15 +101,13 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("Powerup Manager script is null");
         }
-
-
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Move();
         Aim();
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             SpawnProjectile();
@@ -119,28 +116,34 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        //Receive inputs
+        // Receive inputs
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
 
-        //Move Player
+        // Move Player
         Vector3 temp = new Vector3(horizontalInput, verticalInput, 0);
         temp = temp.normalized * _speed * Time.deltaTime;
         transform.position += temp;
     }
 
-    void Aim()
+    private void Aim()
     {
-        //Mouse movement
-        turn += new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
+        // Get mouse position in world coordinates
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0;
+
+        // Calculate direction from player to mouse
+        turn = (mousePosition - transform.position).normalized;
+
+        // Calculate the rotation angle
         float zRot = Mathf.Atan2(turn.y, turn.x) * Mathf.Rad2Deg;
+
+        // Apply rotation
         transform.localRotation = Quaternion.Euler(0, 0, zRot);
     }
 
-
     private void SpawnProjectile()
     {
-        Instantiate(_projectile);
+        Instantiate(_projectile, transform.position, Quaternion.identity);
     }
 }
-

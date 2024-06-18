@@ -7,37 +7,47 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Projectile's speed.
     /// </summary>
-    [SerializeField] private int _speed { get; set; }
-
-    ///private PlayerController _playerController;
-
-    /// <summary>
-    /// Reference to the Player Controller component.
-    /// </summary>
-    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private float _speed = 1000f;
 
     /// <summary>
     /// Projectile's Rigidbody2D component.
     /// </summary>
     private Rigidbody2D _rb;
 
+    /// <summary>
+    /// Reference to the Player Controller component.
+    /// </summary>
+    private PlayerController _playerController;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+
+        // Ensure the Rigidbody2D settings for continuous movement
+        _rb.gravityScale = 0;
+        _rb.drag = 0;
+        _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     private void Start()
     {
-        if (_playerController is null)
+        _playerController = FindObjectOfType<PlayerController>();
+
+        if (_playerController == null)
         {
             Debug.LogError("PlayerController is null");
+            return;
         }
-        _rb.AddForce(new Vector3(_playerController.turn.x, _playerController.turn.y, transform.position.z));
+
+        // Set initial velocity based on player direction
+        Vector2 initialVelocity = new Vector2(_playerController.turn.x, _playerController.turn.y).normalized * _speed;
+        _rb.velocity = initialVelocity;
     }
 
-    void Update()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("turn.x: " + _playerController.turn.x);
-        Debug.Log("turn.y: " + _playerController.turn.y);
+        // Reflect the projectile's velocity when it hits a wall
+        Vector2 normal = collision.contacts[0].normal;
+        _rb.velocity = Vector2.Reflect(_rb.velocity, normal).normalized * _speed;
     }
 }

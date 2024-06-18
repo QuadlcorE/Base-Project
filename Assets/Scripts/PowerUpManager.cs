@@ -26,7 +26,8 @@ public class PowerUpManager : MonoBehaviour
             Debug.LogError("_selectedPowerUps is empty");
             return;
         }
-        else ///remmove else block
+        // this is only here for debugging purposes, remove
+        else
         {
             Debug.Log("PowerUps successfully loaded from PlayerPrefs");
             Debug.Log($"Powerups length: {_selectedPowerUps.Length}");
