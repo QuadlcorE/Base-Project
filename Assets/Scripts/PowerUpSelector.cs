@@ -14,11 +14,6 @@ public class PowerUpSelector : MonoBehaviour
 
     private Scene _currentScene;
 
-    private void Awake()
-    {
-        PlayerPrefs.DeleteAll();
-    }
-
     void Start()
     {
         _currentScene = SceneManager.GetActiveScene();
@@ -58,23 +53,20 @@ public class PowerUpSelector : MonoBehaviour
 
     public void SaveSelectedPowerUps()
     {
-        PlayerPrefs.SetString("powerUps", _selectedPowerUps.ToString());
+        // Convert the list to a comma-separated string before saving
+        PlayerPrefs.SetString("PowerUps", string.Join(",", _selectedPowerUps));
+        Debug.Log(PlayerPrefs.GetString("PowerUps"));
     }
 
     public void LoadNextScene()
     {
-        /// if the current scene is not the powerup slect scene, 
         if (_currentScene.name != "PowerUp-Select-Scene")
         {
-
-            ///     if there is a scene to move to
-            ///         move to the next scene
             int nextSceneIndex = _currentScene.buildIndex + 1;
             SceneManager.LoadScene(nextSceneIndex, LoadSceneMode.Single);
         }
         else
         {
-            /// else, do these checks
             if (_selectedPowerUps.Count < 3)
             {
                 feedbackText.text = "You must select " + maxSelection + " power-ups.";

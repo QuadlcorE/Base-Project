@@ -6,19 +6,29 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     /// <summary>
+    /// Maximum ppossible health for player
+    /// </summary>
+    public const int MaxHealth = 100;
+
+    /// <summary>
+    /// Player's current health
+    /// </summary>
+    private int _health;
+
+    /// <summary>
     /// Player speed
     /// </summary>
-    [SerializeField] float speed = 5;
+    [SerializeField] float _speed = 5;
 
     /// <summary>
     /// 2D Vector containing the mouse x and y axes
     /// </summary>
-    private Vector3 turn;
+    public Vector3 turn { get; private set; }
 
     /// <summary>
-    /// Checks if the player has the turet powerup
+    /// Checks if the player has the turret powerup
     /// </summary>
-    private bool _hasTuret;
+    private bool _hasTurret;
 
     /// <summary>
     /// Checks if the player has the juggernaut powerup
@@ -41,44 +51,51 @@ public class PlayerController : MonoBehaviour
     private bool _hasDropBox;
 
     /// <summary>
-    /// Reference to the PowerUp Manager script on the Player prefab
+    /// Reference to the PowerUp Manager script.
     /// </summary>
-    private PowerUpManager _powerUpManager;
+    [SerializeField] private PowerUpManager _powerUpManager;
 
     private string[] _selectedPowerUps;
+
+    [SerializeField] Projectile _projectile;
 
     // Start is called before the first frame update
     void Start()
     {
-        _powerUpManager = GetComponent<PowerUpManager>();
+        _health = MaxHealth;
 
         if (_powerUpManager != null)
         {
             _selectedPowerUps = _powerUpManager.GetPowerUps();
-            
-            if (_selectedPowerUps.Contains("Turet"))
+
+            if (_selectedPowerUps.Contains("Turret"))
             {
-                _hasTuret = true;
+                _hasTurret = true;
+                Debug.Log($"Has turret: {_hasTurret}");
             }
 
             if (_selectedPowerUps.Contains("Juggernaut"))
             {
                 _hasJuggernaut = true;
+                Debug.Log($"Has juggernaut: {_hasJuggernaut}");
             }
 
             if (_selectedPowerUps.Contains("Canon"))
             {
                 _hasCanon = true;
+                Debug.Log($"Has canon: {_hasCanon}");
             }
 
             if (_selectedPowerUps.Contains("Regen"))
             {
                 _hasRegen = true;
+                Debug.Log($"Has regen: {_hasRegen}");
             }
 
             if (_selectedPowerUps.Contains("Drop Box"))
             {
                 _hasDropBox = true;
+                Debug.Log($"Has drop box: {_hasDropBox}");
             }
         }
         else
@@ -94,6 +111,10 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Aim();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SpawnProjectile();
+        }
     }
 
     private void Move()
@@ -104,17 +125,22 @@ public class PlayerController : MonoBehaviour
 
         //Move Player
         Vector3 temp = new Vector3(horizontalInput, verticalInput, 0);
-        temp = temp.normalized * speed * Time.deltaTime;
+        temp = temp.normalized * _speed * Time.deltaTime;
         transform.position += temp;
     }
 
     void Aim()
     {
         //Mouse movement
-        turn.x += Input.GetAxis("Mouse X");
-        turn.y += Input.GetAxis("Mouse Y");
+        turn += new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
         float zRot = Mathf.Atan2(turn.y, turn.x) * Mathf.Rad2Deg;
         transform.localRotation = Quaternion.Euler(0, 0, zRot);
+    }
+
+
+    private void SpawnProjectile()
+    {
+        Instantiate(_projectile);
     }
 }
 
