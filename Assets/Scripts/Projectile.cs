@@ -44,10 +44,12 @@ public class Projectile : MonoBehaviour
         _rb.velocity = initialVelocity;
     }
 
+    /*
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Reflect the projectile's velocity when it hits a wall
-        Vector2 normal = collision.contacts[0].normal;
+        Vector2 normal = collision.GetContact(0).normal;
         _rb.velocity = Vector2.Reflect(_rb.velocity, normal).normalized * _speed;
     }
+    */
 }
