@@ -1,9 +1,10 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     /// <summary>
     /// Maximum possible health for player
@@ -58,6 +59,23 @@ public class PlayerController : MonoBehaviour
     private string[] _selectedPowerUps;
 
     [SerializeField] private Projectile _projectile;
+
+
+    private NetworkCharacterController _cc;
+
+    private void Awake()
+    {
+        _cc = GetComponent<NetworkCharacterController>();
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (GetInput(out NetworkInputData data))
+        {
+            data.direction.Normalize();
+            _cc.Move(5 * data.direction * Runner.DeltaTime);
+        }
+    }
 
     private void Start()
     {
