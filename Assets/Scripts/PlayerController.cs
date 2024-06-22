@@ -47,9 +47,15 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private DropBox _dropBox;
 
     /// <summary>
+    /// Default Bullet prefab.
+    /// </summary>
+    [SerializeField] private Bullet _bullet;
+
+    /// <summary>
     /// Turret prefab.
     /// </summary>
     [SerializeField] private Turret _turret;
+
 
     /// <summary>
     /// Canon prefab.
@@ -141,18 +147,26 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Instantiate(_bullet, transform.position, Quaternion.identity);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
             if (_hasTurret)
             {
                 Instantiate(_turret, transform.position, Quaternion.identity);
 
             }
-            else if (_hasCanon)
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            if (_hasCanon)
             {
 
                 Instantiate(_canon, transform.position, Quaternion.identity);
             }
         }
-
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {

@@ -137,6 +137,7 @@ MonoBehaviour:
   _speed: 5
   _powerUpManager: {fileID: 0}
   _dropBox: {fileID: 2186645855720405215, guid: 3faaaa715cf93624cbd6a59388b28360, type: 3}
+  _bullet: {fileID: 8051630211443881611, guid: 836a945abd520e34f965f2ea60ced30d, type: 3}
   _turret: {fileID: 7061707425597494664, guid: 2b35cd5a1d52e4c4a8c4ea7e08a5dab7, type: 3}
   _canon: {fileID: -3540864421195861911, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
 --- !u!114 &188180816430153674
