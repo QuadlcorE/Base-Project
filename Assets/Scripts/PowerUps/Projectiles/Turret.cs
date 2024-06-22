@@ -7,5 +7,6 @@ public class Turret : Projectile
     private void Awake()
     {
         _speed = 5000.0f;
+        damagePoints = 5;
     }
 }

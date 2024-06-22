@@ -7,5 +7,6 @@ public class Bullet : Projectile
     private void Awake()
     {
         _speed = 1500.0f;
+        damagePoints = 5;
     }
 }

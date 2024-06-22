@@ -9,6 +9,11 @@ public class Projectile : MonoBehaviour
     protected float _speed;
 
     /// <summary>
+    /// Damage points.
+    /// </summary>
+    protected int damagePoints;
+
+    /// <summary>
     /// Projectile's Rigidbody2D component.
     /// </summary>
     private Rigidbody2D _rb;
@@ -60,6 +65,11 @@ public class Projectile : MonoBehaviour
     {
         Vector2 initialVelocity = new Vector2(_playerController.turn.x, _playerController.turn.y).normalized * _speed * Time.deltaTime;
         _rb.velocity = initialVelocity;
+    }
+
+    public int GetDamagePoints()
+    {
+        return damagePoints;
     }
 
     /*

@@ -27,6 +27,11 @@ public class PlayerController : NetworkBehaviour
     public Vector3 turn { get; private set; }
 
     /// <summary>
+    /// The point from which all bullets and projectiles spawn.
+    /// </summary>
+    [SerializeField] private Transform _spawnPoint;
+
+    /// <summary>
     /// Reference to the PowerUp Manager script.
     /// </summary>
     [SerializeField] private PowerUpManager _powerUpManager;
@@ -55,7 +60,6 @@ public class PlayerController : NetworkBehaviour
     /// Turret prefab.
     /// </summary>
     [SerializeField] private Turret _turret;
-
 
     /// <summary>
     /// Canon prefab.
@@ -147,14 +151,14 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(_bullet, transform.position, Quaternion.identity);
+            Instantiate(_bullet, _spawnPoint.position, Quaternion.identity);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (_hasTurret)
             {
-                Instantiate(_turret, transform.position, Quaternion.identity);
+                Instantiate(_turret, _spawnPoint.position, Quaternion.identity);
 
             }
         }
@@ -164,7 +168,7 @@ public class PlayerController : NetworkBehaviour
             if (_hasCanon)
             {
 
-                Instantiate(_canon, transform.position, Quaternion.identity);
+                Instantiate(_canon, _spawnPoint.position, Quaternion.identity);
             }
         }
 
@@ -172,8 +176,18 @@ public class PlayerController : NetworkBehaviour
         {
             if (_hasDropBox)
             {
-                Instantiate(_dropBox, transform.position, transform.rotation);
+                Instantiate(_dropBox, _spawnPoint.position, transform.rotation);
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Projectile _projectile = collision.gameObject.GetComponent<Projectile>();
+        if (_projectile != null)
+        {
+            TakeDamage(_projectile.GetDamagePoints());
+            Debug.Log(_health);
         }
     }
 
@@ -203,5 +217,10 @@ public class PlayerController : NetworkBehaviour
 
         // Apply rotation
         transform.localRotation = Quaternion.Euler(0, 0, zRot);
+    }
+
+    private void TakeDamage(int damagePoints)
+    {
+        _health -= damagePoints;
     }
 }
