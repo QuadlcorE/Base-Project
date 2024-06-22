@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 53908a2e3f2df2443a8e910b6c88b7b5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _canonProjectilePrefab: {fileID: 8628009940895495387, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

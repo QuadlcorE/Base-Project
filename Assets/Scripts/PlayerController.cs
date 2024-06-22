@@ -27,41 +27,59 @@ public class PlayerController : NetworkBehaviour
     public Vector3 turn { get; private set; }
 
     /// <summary>
-    /// Checks if the player has the turret powerup
-    /// </summary>
-    private bool _hasTurret;
-
-    /// <summary>
-    /// Checks if the player has the juggernaut powerup
-    /// </summary>
-    private bool _hasJuggernaut;
-
-    /// <summary>
-    /// Checks if the player has the canon powerup
-    /// </summary>
-    private bool _hasCanon;
-
-    /// <summary>
-    /// Checks if the player has quick regenerative powers
-    /// </summary>
-    private bool _hasRegen;
-
-    /// <summary>
-    /// Checks if the player has the dropbox powerup
-    /// </summary>
-    private bool _hasDropBox;
-
-    /// <summary>
     /// Reference to the PowerUp Manager script.
     /// </summary>
     [SerializeField] private PowerUpManager _powerUpManager;
 
+    /// <summary>
+    /// Powerups selected by the player.
+    /// </summary>
     private string[] _selectedPowerUps;
 
-    [SerializeField] private Projectile _projectile;
-
-
+    /// <summary>
+    /// Network character controller.
+    /// </summary>
     private NetworkCharacterController _cc;
+
+    /// <summary>
+    /// Dropbox prefab.
+    /// </summary>
+    [SerializeField] private DropBox _dropBox;
+
+    /// <summary>
+    /// Turret prefab.
+    /// </summary>
+    [SerializeField] private Turret _turret;
+
+    /// <summary>
+    /// Canon prefab.
+    /// </summary>
+    [SerializeField] private Canon _canon;
+
+    /// <summary>
+    /// True if player selected turret card.
+    /// </summary>
+    private bool _hasTurret;
+
+    /// <summary>
+    /// True if player selected juggernaut card.
+    /// </summary>
+    private bool _hasJuggernaut;
+
+    /// <summary>
+    /// True if player selected canon card.
+    /// </summary>
+    private bool _hasCanon;
+
+    /// <summary>
+    /// True if player selected regen card.
+    /// </summary>
+    private bool _hasRegen;
+
+    /// <summary>
+    /// True if player selected drop box card.
+    /// </summary>
+    private bool _hasDropBox;
 
     private void Awake()
     {
@@ -88,31 +106,26 @@ public class PlayerController : NetworkBehaviour
             if (_selectedPowerUps.Contains("Turret"))
             {
                 _hasTurret = true;
-                Debug.Log($"Has turret: {_hasTurret}");
             }
 
             if (_selectedPowerUps.Contains("Juggernaut"))
             {
                 _hasJuggernaut = true;
-                Debug.Log($"Has juggernaut: {_hasJuggernaut}");
             }
 
             if (_selectedPowerUps.Contains("Canon"))
             {
                 _hasCanon = true;
-                Debug.Log($"Has canon: {_hasCanon}");
             }
 
             if (_selectedPowerUps.Contains("Regen"))
             {
                 _hasRegen = true;
-                Debug.Log($"Has regen: {_hasRegen}");
             }
 
             if (_selectedPowerUps.Contains("Drop Box"))
             {
                 _hasDropBox = true;
-                Debug.Log($"Has drop box: {_hasDropBox}");
             }
         }
         else
@@ -128,7 +141,25 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SpawnProjectile();
+            if (_hasTurret)
+            {
+                Instantiate(_turret, transform.position, Quaternion.identity);
+
+            }
+            else if (_hasCanon)
+            {
+
+                Instantiate(_canon, transform.position, Quaternion.identity);
+            }
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (_hasDropBox)
+            {
+                Instantiate(_dropBox, transform.position, transform.rotation);
+            }
         }
     }
 
@@ -158,10 +189,5 @@ public class PlayerController : NetworkBehaviour
 
         // Apply rotation
         transform.localRotation = Quaternion.Euler(0, 0, zRot);
-    }
-
-    private void SpawnProjectile()
-    {
-        Instantiate(_projectile, transform.position, Quaternion.identity);
     }
 }

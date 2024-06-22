@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -7,7 +6,7 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Projectile's speed.
     /// </summary>
-    [SerializeField] private float _speed = 1000f;
+    protected float _speed;
 
     /// <summary>
     /// Projectile's Rigidbody2D component.
@@ -19,28 +18,47 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private PlayerController _playerController;
 
-    private void Awake()
+    private void Start()
+    {
+        InitializeRigidbody2D();
+
+        FindPlayerController();
+
+        SetInitialVelocity();
+    }
+
+
+    /// <summary>
+    /// Ensure the Rigidbody2D settings for continuous movement
+    /// </summary>
+    private void InitializeRigidbody2D()
     {
         _rb = GetComponent<Rigidbody2D>();
 
-        // Ensure the Rigidbody2D settings for continuous movement
         _rb.gravityScale = 0;
         _rb.drag = 0;
         _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
-    private void Start()
+    /// <summary>
+    /// Find and initialize PlayerController component 
+    /// </summary>
+    private void FindPlayerController()
     {
         _playerController = FindObjectOfType<PlayerController>();
-
         if (_playerController == null)
         {
             Debug.LogError("PlayerController is null");
             return;
         }
+    }
 
-        // Set initial velocity based on player direction
-        Vector2 initialVelocity = new Vector2(_playerController.turn.x, _playerController.turn.y).normalized * _speed;
+    /// <summary>
+    /// Set initial velocity of the projectile based on player direction
+    /// </summary>
+    private void SetInitialVelocity()
+    {
+        Vector2 initialVelocity = new Vector2(_playerController.turn.x, _playerController.turn.y).normalized * _speed * Time.deltaTime;
         _rb.velocity = initialVelocity;
     }
 
@@ -52,4 +70,6 @@ public class Projectile : MonoBehaviour
         _rb.velocity = Vector2.Reflect(_rb.velocity, normal).normalized * _speed;
     }
     */
+
+
 }

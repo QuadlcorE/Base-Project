@@ -136,7 +136,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _powerUpManager: {fileID: 0}
-  _projectile: {fileID: 6096989321011195786, guid: d711f6e8a8bd8f248a601d856a0618d4, type: 3}
+  _dropBox: {fileID: 2186645855720405215, guid: 3faaaa715cf93624cbd6a59388b28360, type: 3}
+  _turret: {fileID: 7061707425597494664, guid: 2b35cd5a1d52e4c4a8c4ea7e08a5dab7, type: 3}
+  _canon: {fileID: -3540864421195861911, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
 --- !u!114 &188180816430153674
 MonoBehaviour:
   m_ObjectHideFlags: 0

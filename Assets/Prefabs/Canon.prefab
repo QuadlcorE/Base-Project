@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 822933792191998042}
   - component: {fileID: 1487260862984903171}
-  - component: {fileID: 6096989321011195786}
   - component: {fileID: 5408049222504872254}
   - component: {fileID: 548806117991188534}
+  - component: {fileID: -3540864421195861911}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: Canon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,20 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6096989321011195786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8628009940895495387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b699aea99c6db4b1da8d48fefd6ad985, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _canon: {fileID: -3540864421195861911, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
-  _turret: {fileID: 7061707425597494664, guid: 2b35cd5a1d52e4c4a8c4ea7e08a5dab7, type: 3}
 --- !u!50 &5408049222504872254
 Rigidbody2D:
   serializedVersion: 4
@@ -163,3 +149,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &-3540864421195861911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8628009940895495387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53908a2e3f2df2443a8e910b6c88b7b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canon: {fileID: 0}
+  _turret: {fileID: 0}
+  _canonProjectilePrefab: {fileID: 8628009940895495387}
