@@ -19,6 +19,7 @@ public class ClickMouse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     {
         Start,
         Settings,
+        PowerSelector,
         Exit,
         Marketplace,
         About
@@ -42,25 +43,25 @@ public class ClickMouse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerDown(PointerEventData eventData)
     {
         // Code
-        mr.material.color = Color.cyan;
+        if (mr != null) mr.material.color = Color.cyan;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        mr.material.color = Color.green;
+        if (mr != null) mr.material.color = Color.green;
         // Debug.Log($"You are pointing at {gameObject.name}");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        mr.material.color = Color.white;
+        if (mr != null) mr .material.color = Color.white;
         // Code
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         // Code
-        mr.material.color = Color.white;
+        if (mr != null) mr .material.color = Color.white;
     }
 
     public void ButtonClicked()
@@ -74,6 +75,9 @@ public class ClickMouse : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 // TODO: Disable Mouse input.
                 if (timelineControllerScript != null) timelineControllerScript.Play();
                 StartCoroutine(eventHandlerScript.StartChangeScene(timelineControllerScript.PlayDuration()));
+                break;
+            case Buttons.PowerSelector:
+                eventHandlerScript.StartStageSelectorScene();
                 break;
             case Buttons.About:
                 break;

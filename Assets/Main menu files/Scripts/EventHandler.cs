@@ -14,4 +14,9 @@ public class EventHandler : MonoBehaviour
         Debug.Log("And I ran");
         SceneManager.LoadScene(GameplayScene);
     }
+
+    public void StartStageSelectorScene()
+    {
+        SceneManager.LoadScene("PowerUp-Select-Scene");
+    }
 }
