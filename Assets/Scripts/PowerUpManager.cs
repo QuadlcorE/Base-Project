@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PowerUpManager : MonoBehaviour
@@ -7,35 +8,66 @@ public class PowerUpManager : MonoBehaviour
     /// <summary>
     /// Array containing the powerups that the player has selected.
     /// </summary>
-    private string[] _selectedPowerUps;
+    private List<string> _selectedPowerUps;
+
+    /// <summary>
+    /// Index to track the currently active power-up.
+    /// </summary>
+    private int _currentPowerUpIndex = 0;
+
+    public bool HasTurret { get; private set; }
+    public bool HasJuggernaut { get; private set; }
+    public bool HasCanon { get; private set; }
+    public bool HasRegen { get; private set; }
+    public bool HasDropBox { get; private set; }
 
     void Awake()
     {
-        string powerUps = PlayerPrefs.GetString("PowerUps", string.Empty);
+        _selectedPowerUps = GetPowerUps().ToList();
 
-        if (string.IsNullOrEmpty(powerUps))
+        if (_selectedPowerUps != null)
         {
-            Debug.LogError("No power-ups found in PlayerPrefs");
+            HasTurret = _selectedPowerUps.Contains("Turret");
+            HasJuggernaut = _selectedPowerUps.Contains("Juggernaut");
+            HasCanon = _selectedPowerUps.Contains("Canon");
+            HasRegen = _selectedPowerUps.Contains("Regen");
+            HasDropBox = _selectedPowerUps.Contains("Drop Box");
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            TogglePowerUps();
+        }
+    }
+
+    /// <summary>
+    /// Toggles to the next power-up in the list.
+    /// </summary>
+    private void TogglePowerUps()
+    {
+        if (_selectedPowerUps.Count == 0)
             return;
-        }
 
-        _selectedPowerUps = powerUps.Split(',');
+        _currentPowerUpIndex = (_currentPowerUpIndex + 1) % _selectedPowerUps.Count;
+        string currentPowerUp = _selectedPowerUps[_currentPowerUpIndex];
+        Debug.Log("Current Power-Up: " + currentPowerUp);
 
-        if (_selectedPowerUps.Length == 0)
-        {
-            Debug.LogError("_selectedPowerUps is empty");
-            return;
-        }
-        // this is only here for debugging purposes, remove
-        else
-        {
-            Debug.Log("PowerUps successfully loaded from PlayerPrefs");
-            Debug.Log($"Powerups length: {_selectedPowerUps.Length}");
-            foreach (var item in _selectedPowerUps)
-            {
-                Debug.Log("Item: " + item);
-            }
-        }
+        // Here you can add code to update the player's current power-up based on `currentPowerUp`
+    }
+
+    /// <summary>
+    /// Gets the currently active power-up.
+    /// </summary>
+    /// <returns>The current power-up as a string.</returns>
+    public string GetCurrentPowerUp()
+    {
+        if (_selectedPowerUps.Count == 0)
+            return string.Empty;
+
+        return _selectedPowerUps[_currentPowerUpIndex];
     }
 
     public string[] GetPowerUps()

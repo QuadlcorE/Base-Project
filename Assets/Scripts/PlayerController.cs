@@ -54,14 +54,14 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    private PlayerPowerUpManager _playerPowerUpManager;
+    private PowerUpManager _powerUpManager;
 
     private void Awake()
     {
         _playerMovement = GetComponent<PlayerMovement>();
         _playerAiming = GetComponent<PlayerAiming>();
         _playerHealth = GetComponent<PlayerHealth>();
-        _playerPowerUpManager = GetComponent<PlayerPowerUpManager>();
+        _powerUpManager = GetComponent<PowerUpManager>();
     }
 
     private void Update()
@@ -78,20 +78,11 @@ public class PlayerController : MonoBehaviour
         {
             FireBullet();
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _playerPowerUpManager.HasTurret)
+        
+        // Use the active power-up from the PowerUpManager
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            FireTurret();
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightShift) && _playerPowerUpManager.HasCanon)
-        {
-            FireCanon();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab) && _playerPowerUpManager.HasDropBox)
-        {
-            DropBox();
+            FireActivePowerUp();
         }
     }
 
@@ -100,19 +91,31 @@ public class PlayerController : MonoBehaviour
         Instantiate(_bullet, _spawnPoint.position, Quaternion.identity);
     }
 
-    private void FireTurret()
-    {
-        Instantiate(_turret, _spawnPoint.position, Quaternion.identity);
-    }
 
-    private void FireCanon()
+    private void FireActivePowerUp()
     {
-        Instantiate(_canon, _spawnPoint.position, Quaternion.identity);
-    }
+        string currentPowerUp = _powerUpManager.GetCurrentPowerUp();
 
-    private void DropBox()
-    {
-        Instantiate(_dropBox, _spawnPoint.position, transform.rotation);
+        switch (currentPowerUp)
+        {
+            case "Turret":
+                Instantiate(_turret, _spawnPoint.position, Quaternion.identity);
+                break;
+
+            case "Canon":
+                Instantiate(_canon, _spawnPoint.position, Quaternion.identity);
+                break;
+
+            case "Drop Box":
+                Instantiate(_dropBox, _spawnPoint.position, transform.rotation);
+                break;
+
+            // Add cases for other power-ups
+
+            default:
+                Debug.LogWarning("No valid power-up selected");
+                break;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
