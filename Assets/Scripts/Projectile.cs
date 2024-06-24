@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Reference to the Player Controller component.
     /// </summary>
-    private PlayerController _playerController;
+    private PlayerAiming _playerAiming;
 
     private void Start()
     {
@@ -50,8 +50,8 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private void FindPlayerController()
     {
-        _playerController = FindObjectOfType<PlayerController>();
-        if (_playerController == null)
+        _playerAiming = FindObjectOfType<PlayerAiming>();
+        if (_playerAiming == null)
         {
             Debug.LogError("PlayerController is null");
             return;
@@ -63,7 +63,7 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private void SetInitialVelocity()
     {
-        Vector2 initialVelocity = new Vector2(_playerController.turn.x, _playerController.turn.y).normalized * _speed * Time.deltaTime;
+        Vector2 initialVelocity = new Vector2(_playerAiming.turn.x, _playerAiming.turn.y).normalized * _speed * Time.deltaTime;
         _rb.velocity = initialVelocity;
     }
 

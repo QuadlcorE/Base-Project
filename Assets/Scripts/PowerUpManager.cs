@@ -40,6 +40,6 @@ public class PowerUpManager : MonoBehaviour
 
     public string[] GetPowerUps()
     {
-        return _selectedPowerUps;
+        return PlayerPrefs.GetString("PowerUps").Split(',');
     }
 }
