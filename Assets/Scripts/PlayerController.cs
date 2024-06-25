@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
         Projectile _projectile = collision.gameObject.GetComponent<Projectile>();
         if (_projectile != null)
         {
+            string currentPowerUp = _powerUpManager.GetCurrentPowerUp();
             _playerHealth.TakeDamage(_projectile.GetDamagePoints());
         }
     }

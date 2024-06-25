@@ -26,9 +26,10 @@ public class PlayerHealth : MonoBehaviour
     {
         if (_currentHealth < MaxHealth)
         {
-            _currentHealth += (int)(_regenRate * Time.deltaTime);
-            _currentHealth = Mathf.Min(_currentHealth, MaxHealth);
-            Debug.Log($"Health regenerating: {_currentHealth}");
+            // Use float for more precise calculations and cast to int only when setting _currentHealth
+            float newHealth = _currentHealth + (_regenRate * Time.deltaTime);
+            _currentHealth = Mathf.Min((int)newHealth, MaxHealth);
+            Debug.Log($"Health after regeneration: {_currentHealth}");
         }
     }
 

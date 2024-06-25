@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -23,12 +24,13 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private PlayerAiming _playerAiming;
 
+    private PowerUpManager _powerUpManager;
+
     private void Start()
     {
+        _powerUpManager = GameObject.Find("PowerUpManager").GetComponent<PowerUpManager>();
         InitializeRigidbody2D();
-
         FindPlayerController();
-
         SetInitialVelocity();
     }
 
@@ -69,17 +71,15 @@ public class Projectile : MonoBehaviour
 
     public int GetDamagePoints()
     {
-        return damagePoints;
+        if (_powerUpManager != null)
+        {
+            string currentPowerUp = _powerUpManager.GetCurrentPowerUp();
+            return (currentPowerUp == "Juggernaut") ? damagePoints / 2 : damagePoints;
+        }
+        else
+        {
+            Debug.LogError("_powerUpManager is null");
+            return 0;
+        }
     }
-
-    /*
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Reflect the projectile's velocity when it hits a wall
-        Vector2 normal = collision.GetContact(0).normal;
-        _rb.velocity = Vector2.Reflect(_rb.velocity, normal).normalized * _speed;
-    }
-    */
-
-
 }
