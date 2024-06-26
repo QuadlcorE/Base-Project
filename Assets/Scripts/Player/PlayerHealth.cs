@@ -3,46 +3,46 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public const int MaxHealth = 100;
-    private int _currentHealth;
-    private bool _isRegenerating;
-    private float _regenRate = 5f; // Health per second
+    private float _currentHealth;
+    public float _regenRate; // Health per second
     private bool _hasJuggernaut;
+
+    private PowerUpManager _powerUpManager;
+    private string _currentPowerUp;
 
     private void Start()
     {
+        _regenRate = 5;
+        _powerUpManager = GetComponent<PowerUpManager>();
         _currentHealth = MaxHealth;
         Debug.Log($"Initial Health: {_currentHealth}");
     }
 
     private void Update()
     {
-        if (_isRegenerating)
+        UpdateCurrentPowerUp();
+        if (_currentPowerUp == "Regen")
         {
             RegenerateHealth();
         }
     }
 
+    private void UpdateCurrentPowerUp()
+    {
+        _currentPowerUp = _powerUpManager.GetCurrentPowerUp();
+    }
+
+    /// <summary>
+    /// Regenerates player health to max health in Update() when regen is activated. 
+    /// </summary>
     private void RegenerateHealth()
     {
-        if (_currentHealth < MaxHealth)
+        _currentHealth += _regenRate * Time.deltaTime;
+        if (_currentHealth > MaxHealth)
         {
-            // Use float for more precise calculations and cast to int only when setting _currentHealth
-            float newHealth = _currentHealth + (_regenRate * Time.deltaTime);
-            _currentHealth = Mathf.Min((int)newHealth, MaxHealth);
-            Debug.Log($"Health after regeneration: {_currentHealth}");
+            _currentHealth = MaxHealth;
         }
-    }
-
-    public void EnableRegeneration()
-    {
-        _isRegenerating = true;
-        Debug.Log("Health regeneration enabled");
-    }
-
-    public void DisableRegeneration()
-    {
-        _isRegenerating = false;
-        Debug.Log("Health regeneration disabled");
+        Debug.Log($"Regenerating Health: {_currentHealth}");
     }
 
     public void EnableJuggernaut()
@@ -77,7 +77,6 @@ public class PlayerHealth : MonoBehaviour
 
     public void DisableAllPowerUps()
     {
-        DisableRegeneration();
         DisableJuggernaut();
         Debug.Log("All power-ups disabled");
     }

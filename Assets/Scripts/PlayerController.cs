@@ -70,11 +70,9 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "Regen":
-                _playerHealth.EnableRegeneration();
                 break;
 
             case "Juggernaut":
-                _playerHealth.EnableJuggernaut();
                 break;
 
             default:
@@ -88,7 +86,6 @@ public class PlayerController : MonoBehaviour
         Projectile _projectile = collision.gameObject.GetComponent<Projectile>();
         if (_projectile != null)
         {
-            string currentPowerUp = _powerUpManager.GetCurrentPowerUp();
             _playerHealth.TakeDamage(_projectile.GetDamagePoints());
         }
     }
