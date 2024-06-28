@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Damage points.
     /// </summary>
-    protected int damagePoints;
+    protected float damagePoints;
 
     /// <summary>
     /// Projectile's Rigidbody2D component.
@@ -69,12 +69,12 @@ public class Projectile : MonoBehaviour
         _rb.velocity = initialVelocity;
     }
 
-    public int GetDamagePoints()
+    public float GetDamagePoints()
     {
         if (_powerUpManager != null)
         {
-            string currentPowerUp = _powerUpManager.GetCurrentPowerUp();
-            return (currentPowerUp == "Juggernaut") ? damagePoints / 2 : damagePoints;
+            PowerUpManager.Powerups currentPowerUp = _powerUpManager.GetCurrentActivePowerUp();
+            return (currentPowerUp == PowerUpManager.Powerups.Juggernaut) ? damagePoints / 2 : damagePoints;
         }
         else
         {

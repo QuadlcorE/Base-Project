@@ -13,12 +13,23 @@ public class PlayerController : MonoBehaviour
     private PlayerHealth _playerHealth;
     private PowerUpManager _powerUpManager;
 
+    private PowerUpManager.Powerups _currentActivePowerUp;
+
     private void Awake()
     {
         _playerMovement = GetComponent<PlayerMovement>();
         _playerAiming = GetComponent<PlayerAiming>();
         _playerHealth = GetComponent<PlayerHealth>();
         _powerUpManager = GetComponent<PowerUpManager>();
+    }
+
+    private void Start()
+    {
+        if (_powerUpManager != null)
+        {
+            _powerUpManager.OnPowerUpChanged += HandlePowerUpChanged;
+            _currentActivePowerUp = _powerUpManager.GetCurrentActivePowerUp();
+        }
     }
 
     private void Update()
@@ -36,7 +47,6 @@ public class PlayerController : MonoBehaviour
             FireBullet();
         }
 
-        // Use the active power-up from the PowerUpManager
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             UseActivePowerUp();
@@ -50,29 +60,26 @@ public class PlayerController : MonoBehaviour
 
     private void UseActivePowerUp()
     {
-        _playerHealth.DisableAllPowerUps();
-
-        string currentPowerUp = _powerUpManager.GetCurrentPowerUp();
-        Debug.Log($"Activating power-up: {currentPowerUp}");
-
-        switch (currentPowerUp)
+        switch (_currentActivePowerUp)
         {
-            case "Turret":
+            case PowerUpManager.Powerups.Turret:
                 Instantiate(_turret, _spawnPoint.position, Quaternion.identity);
                 break;
 
-            case "Canon":
+            case PowerUpManager.Powerups.Canon:
                 Instantiate(_canon, _spawnPoint.position, Quaternion.identity);
                 break;
 
-            case "Drop Box":
+            case PowerUpManager.Powerups.DropBox:
                 Instantiate(_dropBox, _spawnPoint.position, transform.rotation);
                 break;
 
-            case "Regen":
+            case PowerUpManager.Powerups.Regen:
+                // Do nothing
                 break;
 
-            case "Juggernaut":
+            case PowerUpManager.Powerups.Juggernaut:
+                // Do nothing
                 break;
 
             default:
@@ -84,9 +91,49 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Projectile _projectile = collision.gameObject.GetComponent<Projectile>();
+
         if (_projectile != null)
         {
-            _playerHealth.TakeDamage(_projectile.GetDamagePoints());
+            float _damagePoints = _projectile.GetDamagePoints();
+            _playerHealth.TakeDamage(_damagePoints);
+        }
+    }
+
+    private void HandlePowerUpChanged(PowerUpManager.Powerups newPowerUp)
+    {
+        switch (newPowerUp)
+        {
+            case PowerUpManager.Powerups.Regen:
+                _currentActivePowerUp = PowerUpManager.Powerups.Regen;
+                break;
+
+            case PowerUpManager.Powerups.Juggernaut:
+                _currentActivePowerUp = PowerUpManager.Powerups.Juggernaut;
+                break;
+
+            case PowerUpManager.Powerups.Turret:
+                _currentActivePowerUp = PowerUpManager.Powerups.Turret;
+                break;
+
+            case PowerUpManager.Powerups.Canon:
+                _currentActivePowerUp = PowerUpManager.Powerups.Canon;
+                break;
+
+            case PowerUpManager.Powerups.DropBox:
+                _currentActivePowerUp = PowerUpManager.Powerups.DropBox;
+                break;
+
+            default:
+                Debug.LogWarning("No valid power-up selected");
+                break;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_powerUpManager != null)
+        {
+            _powerUpManager.OnPowerUpChanged -= HandlePowerUpChanged;
         }
     }
 }

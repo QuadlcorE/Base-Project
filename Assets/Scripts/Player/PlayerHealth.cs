@@ -1,39 +1,77 @@
+using System;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public const int MaxHealth = 100;
-    private float _currentHealth;
-    public float _regenRate; // Health per second
-    private bool _hasJuggernaut;
-
+    /// <summary>
+    /// Reference to the powerup manager
+    /// </summary>
     private PowerUpManager _powerUpManager;
-    private string _currentPowerUp;
 
-    private void Start()
+
+    private enum Powerups
     {
-        _regenRate = 5;
+        Regen,
+        Juggernaut
+    };
+
+    /// <summary>
+    /// Checks whether juggernaut or regen is the current powerup. 
+    /// </summary>
+    private PowerUpManager.Powerups _currentActivePowerup;
+
+    /// <summary>
+    /// Player's health regeneration rate( health per second)
+    /// </summary>
+    public float _regenRate;
+    
+    public const int MaxHealth = 100;
+    
+    private float _currentHealth;
+
+    private void Awake()
+    {
         _powerUpManager = GetComponent<PowerUpManager>();
+
+        if (_powerUpManager != null)
+        {
+            _powerUpManager.OnPowerUpChanged += HandlePowerUpChanged;
+        }
+
+        _regenRate = 5;
         _currentHealth = MaxHealth;
-        Debug.Log($"Initial Health: {_currentHealth}");
     }
+
 
     private void Update()
     {
-        UpdateCurrentPowerUp();
-        if (_currentPowerUp == "Regen")
+        if (_currentActivePowerup == PowerUpManager.Powerups.Regen)
         {
             RegenerateHealth();
         }
     }
 
-    private void UpdateCurrentPowerUp()
+    private void HandlePowerUpChanged(PowerUpManager.Powerups newPowerUp)
     {
-        _currentPowerUp = _powerUpManager.GetCurrentPowerUp();
+        switch (newPowerUp)
+        {
+            case PowerUpManager.Powerups.Regen:
+                _currentActivePowerup = PowerUpManager.Powerups.Regen;
+                break;
+
+            case PowerUpManager.Powerups.Juggernaut:
+                _currentActivePowerup = PowerUpManager.Powerups.Juggernaut;
+                break;
+
+            default:
+                // Set to an invalid value because this script only needs to know when regen or juggernaut is active
+                _currentActivePowerup = (PowerUpManager.Powerups)(-1);
+                break;
+        }
     }
 
     /// <summary>
-    /// Regenerates player health to max health in Update() when regen is activated. 
+    /// Regenerates player health to max health when regen is activated. 
     /// </summary>
     private void RegenerateHealth()
     {
@@ -42,31 +80,15 @@ public class PlayerHealth : MonoBehaviour
         {
             _currentHealth = MaxHealth;
         }
-        Debug.Log($"Regenerating Health: {_currentHealth}");
     }
 
-    public void EnableJuggernaut()
+    internal void TakeDamage(float damage)
     {
-        _hasJuggernaut = true;
-        Debug.Log("Juggernaut mode enabled");
-    }
-
-    public void DisableJuggernaut()
-    {
-        _hasJuggernaut = false;
-        Debug.Log("Juggernaut mode disabled");
-    }
-
-    public void TakeDamage(int damage)
-    {
-        if (_hasJuggernaut)
+        if (_currentActivePowerup == PowerUpManager.Powerups.Juggernaut)
         {
-            damage /= 2; // Reduce damage by half
-            Debug.Log("Juggernaut mode active: Damage reduced");
+            damage /= 2;
         }
-
         _currentHealth -= damage;
-        Debug.Log($"Player took damage: {_currentHealth}");
 
         if (_currentHealth <= 0)
         {
@@ -75,9 +97,11 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void DisableAllPowerUps()
+    private void OnDestroy()
     {
-        DisableJuggernaut();
-        Debug.Log("All power-ups disabled");
+        if (_powerUpManager != null)
+        {
+            _powerUpManager.OnPowerUpChanged -= HandlePowerUpChanged;
+        }
     }
 }

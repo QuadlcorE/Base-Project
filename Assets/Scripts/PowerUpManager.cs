@@ -1,38 +1,52 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 public class PowerUpManager : MonoBehaviour
 {
     /// <summary>
-    /// Array containing the powerups that the player has selected.
+    /// List containing the powerups that the player has selected.
     /// </summary>
     private List<string> _selectedPowerUps;
 
     /// <summary>
     /// Index to track the currently active power-up.
     /// </summary>
-    private int _currentPowerUpIndex = 0;
+    private int _currentPowerUpIndex;
 
-    public bool HasTurret { get; private set; }
-    public bool HasJuggernaut { get; private set; }
-    public bool HasCanon { get; private set; }
-    public bool HasRegen { get; private set; }
-    public bool HasDropBox { get; private set; }
+    public enum Powerups
+    {
+        Turret,
+        Canon,
+        Regen,
+        Juggernaut,
+        DropBox
+    };
+
+    /// <summary>
+    /// Checks for the current active powerup. 
+    /// </summary>
+    private Powerups _currentActivePowerUp;
+
+    public event Action<Powerups> OnPowerUpChanged;
+
+    [SerializeField] private TextMeshProUGUI _currentPowerUpText;
+
 
     void Awake()
     {
-        _selectedPowerUps = GetPowerUps().ToList();
+        _selectedPowerUps = GetSelectedPowerUps();
 
-        if (_selectedPowerUps != null)
-        {
-            HasTurret = _selectedPowerUps.Contains("Turret");
-            HasJuggernaut = _selectedPowerUps.Contains("Juggernaut");
-            HasCanon = _selectedPowerUps.Contains("Canon");
-            HasRegen = _selectedPowerUps.Contains("Regen");
-            HasDropBox = _selectedPowerUps.Contains("Drop Box");
-        }
+        //Set default _currentActivePowerUp to _selectedPowerUps[0]
+        _currentActivePowerUp = (Powerups)Enum.Parse(typeof(Powerups), _selectedPowerUps[0]);
+    }
+
+    private void Start()
+    {
+        _currentPowerUpText.text = _selectedPowerUps[0];
     }
 
     private void Update()
@@ -48,30 +62,43 @@ public class PowerUpManager : MonoBehaviour
     /// </summary>
     private void TogglePowerUps()
     {
-        if (_selectedPowerUps.Count == 0)
-            return;
+        if (_selectedPowerUps.Count > 0)
+        {
+            _currentPowerUpIndex = (_currentPowerUpIndex + 1) % _selectedPowerUps.Count;
+            string currentPowerUp = _selectedPowerUps[_currentPowerUpIndex];
+            SetCurrentPowerUp(currentPowerUp);
+        }
+    }
 
-        _currentPowerUpIndex = (_currentPowerUpIndex + 1) % _selectedPowerUps.Count;
-        string currentPowerUp = _selectedPowerUps[_currentPowerUpIndex];
-        Debug.Log("Current Power-Up: " + currentPowerUp);
-
-        // Here you can add code to update the player's current power-up based on `currentPowerUp`
+    private void SetCurrentPowerUp(string powerUp)
+    {
+        if (Enum.TryParse(powerUp, out Powerups newPowerUp))
+        {
+            _currentActivePowerUp = newPowerUp;
+            _currentPowerUpText.text = powerUp.ToString();
+            OnPowerUpChanged?.Invoke(_currentActivePowerUp);
+        }
+        else
+        {
+            Debug.LogError("Invalid power-up: " + powerUp);
+        }
     }
 
     /// <summary>
     /// Gets the currently active power-up.
     /// </summary>
-    /// <returns>The current power-up as a string.</returns>
-    public string GetCurrentPowerUp()
+    /// <returns>The current power-up.</returns>
+    public Powerups GetCurrentActivePowerUp()
     {
-        if (_selectedPowerUps.Count == 0)
-            return string.Empty;
-
-        return _selectedPowerUps[_currentPowerUpIndex];
+        return _currentActivePowerUp;
     }
 
-    public string[] GetPowerUps()
+    /// <summary>
+    /// Gets all the selected powerups from PlayerPrefs
+    /// </summary>
+    /// <returns>list of strings containing the player's selected powerups</returns>
+    public List<string> GetSelectedPowerUps()
     {
-        return PlayerPrefs.GetString("PowerUps").Split(',');
+        return PlayerPrefs.GetString("PowerUps").Split(',').ToList();
     }
 }
