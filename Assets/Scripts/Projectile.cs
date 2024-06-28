@@ -33,6 +33,30 @@ public class Projectile : MonoBehaviour
         FindPlayerController();
         SetInitialVelocity();
     }
+    /*
+     * 
+        public void Shoot(Vector2 shootDirection)
+        {
+            this.direction = shootDirection;
+            rb.velocity = this.direction * speed;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Wall"))
+            {
+                var firstContact = collision.GetContact(0);
+                Vector2 newVelocity = Vector2.Reflect((_playerAiming.turn.x, _playerAiming.turn.y), firstContact.normal);
+                Shoot(newVelocity.normalized);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+     */
+
 
 
     /// <summary>
