@@ -33,20 +33,33 @@ public class PowerUpManager : MonoBehaviour
 
     public event Action<Powerups> OnPowerUpChanged;
 
-    [SerializeField] private TextMeshProUGUI _currentPowerUpText;
+    [SerializeField] private TextMeshProUGUI _currentActivePowerUpText;
 
 
     void Awake()
     {
         _selectedPowerUps = GetSelectedPowerUps();
-
-        //Set default _currentActivePowerUp to _selectedPowerUps[0]
+        if (_selectedPowerUps == null || _selectedPowerUps.Count == 0)
+        {
+            Debug.LogWarning("No power-ups selected. Initializing with default power-ups.");
+            _selectedPowerUps = new List<string> { "Turret", "Canon", "Regen" }; // Add default power-ups
+        }
         _currentActivePowerUp = (Powerups)Enum.Parse(typeof(Powerups), _selectedPowerUps[0]);
+        _currentPowerUpIndex = 0;
     }
 
     private void Start()
     {
-        _currentPowerUpText.text = _selectedPowerUps[0];
+        _currentActivePowerUpText = GameObject.FindWithTag("CurrentActivePowerUp").GetComponent<TextMeshProUGUI>();
+        
+        if (_currentActivePowerUpText != null)
+        {
+            _currentActivePowerUpText.text = _selectedPowerUps[0];
+        }
+        else
+        {
+            Debug.LogWarning("_currentPowerUpText is not assigned in the inspector.");
+        }
     }
 
     private void Update()
@@ -72,10 +85,13 @@ public class PowerUpManager : MonoBehaviour
 
     private void SetCurrentPowerUp(string powerUp)
     {
-        if (Enum.TryParse(powerUp, out Powerups newPowerUp))
+        if (Enum.TryParse(powerUp, out PowerUpManager.Powerups newPowerUp))
         {
             _currentActivePowerUp = newPowerUp;
-            _currentPowerUpText.text = powerUp.ToString();
+            if (_currentActivePowerUpText != null)
+            {
+                _currentActivePowerUpText.text = newPowerUp.ToString();
+            }
             OnPowerUpChanged?.Invoke(_currentActivePowerUp);
         }
         else
@@ -99,6 +115,12 @@ public class PowerUpManager : MonoBehaviour
     /// <returns>list of strings containing the player's selected powerups</returns>
     public List<string> GetSelectedPowerUps()
     {
-        return PlayerPrefs.GetString("PowerUps").Split(',').ToList();
+        string powerUpsString = PlayerPrefs.GetString("PowerUps", "");
+        if (string.IsNullOrEmpty(powerUpsString))
+        {
+            Debug.LogWarning("No power-ups found in PlayerPrefs. Returning an empty list.");
+            return new List<string>();
+        }
+        return powerUpsString.Split(',').ToList();
     }
 }

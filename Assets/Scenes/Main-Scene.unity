@@ -763,7 +763,7 @@ GameObject:
   - component: {fileID: 594756170}
   m_Layer: 5
   m_Name: Current Powerup Text (TMP)
-  m_TagString: Untagged
+  m_TagString: CurrentActivePowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1196,7 +1196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18d4937cdeb3554458112ef135f72ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentPowerUpText: {fileID: 0}
+  _currentActivePowerUpText: {fileID: 0}
 --- !u!4 &855649120
 Transform:
   m_ObjectHideFlags: 0
