@@ -1,37 +1,36 @@
 using UnityEngine;
 
-public class TurretAI : MonoBehaviour
+public class CannonAI : MonoBehaviour
 {
     public GameObject tracker;
-    
+
     public float idleTime;
     public float trackTime;
     public float firingTime;
 
-    private TurretController turretController;
-    private TurretStates currentState;
-    
+    private CannonController cannonController;
+    private CannonStates currentState;
+
     private float currentIdleTime;
     private float randomWaitTime;
     private bool inIdleTime;
 
     private float currentTrackTime;
 
-    private float currentFiringTime;
+    private float currentFireTime;
 
-    private enum TurretStates
+
+    private enum CannonStates
     {
         Idle,
         Tracking,
         Firing
     }
 
-
-    // ==================== State Definitions ============================
+    // ========================== State Definitions ==============================
     private void IdleState()
     {
         currentIdleTime += Time.deltaTime;
-
         if (inIdleTime == false) randomWaitTime = Random.Range(idleTime/2, idleTime);
         inIdleTime = true;
 
@@ -39,47 +38,41 @@ public class TurretAI : MonoBehaviour
         {
             currentIdleTime = 0;
             inIdleTime = false;
-            currentState = TurretStates.Tracking;
+            currentState = CannonStates.Tracking;
         }
     }
 
     private void TrackingState()
     {
-        currentTrackTime += Time.deltaTime;       
-        if (turretController != null)
-        {
-            turretController.TrackTarget(tracker);
-        }
+        currentTrackTime += Time.deltaTime;
+        if (cannonController != null) cannonController.TrackTarget(tracker);
         if (currentTrackTime >= trackTime)
         {
             currentTrackTime = 0;
-            currentState = TurretStates.Firing;
+            currentState = CannonStates.Firing;
         }
-
     }
 
     private void FiringState()
     {
-        currentFiringTime += Time.deltaTime;
-        turretController.firing = true;
-        if (currentFiringTime >= firingTime)
+        if (currentFireTime == 0) cannonController.Fire();
+        currentFireTime += Time.deltaTime;
+        if (currentFireTime >= firingTime)
         {
-            currentFiringTime = 0;
-            turretController.firing = false;
-            currentState = TurretStates.Tracking;
+            currentFireTime = 0;
+            currentState = CannonStates.Tracking;
         }
-        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        turretController = GetComponent<TurretController>();
-        currentState = TurretStates.Idle;
-        inIdleTime = false;
+        cannonController = GetComponent<CannonController>();
+        currentState = CannonStates.Idle;
         currentIdleTime = 0;
         currentTrackTime = 0;
-        currentFiringTime = 0;
+        currentFireTime = 0;
+        inIdleTime = false;   
     }
 
     // Update is called once per frame
@@ -87,14 +80,14 @@ public class TurretAI : MonoBehaviour
     {
         switch (currentState)
         {
-            case TurretStates.Idle:
+            case CannonStates.Idle:
                 IdleState();
                 break;
-            case TurretStates.Firing:
-                FiringState();
-                break;
-            case TurretStates.Tracking:
+            case CannonStates.Tracking:
                 TrackingState();
+                break;
+            case CannonStates.Firing:
+                FiringState();
                 break;
         }
     }

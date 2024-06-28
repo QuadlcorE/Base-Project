@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class TurretBullet : MonoBehaviour
+public class CannonBullet : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public int life = 3;
-    public float speed = 30f;
+    public int life = 1;
+    public float speed = 20f;
 
     private Vector2 direction;
+
     // Start is called before the first frame update
     void Start()
     {
         this.direction = direction;
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 4f);
     }
 
     public void Shoot(Vector2 shootDirection)

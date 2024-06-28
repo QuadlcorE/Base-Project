@@ -20,6 +20,11 @@ public class PowerUps : MonoBehaviour
     public static GameObject dropBoxPrefab;
     public static GameObject regenPrefab;
 
+    public static float cannonCoolDownTime = 5f;
+    public static float turretCoolDownTime = 5f;
+    public static float dropBoxCoolDownTime = 5f;
+    public static float regenCoolDownTime = 5f;
+
     public static void activate(PowerUpDefinitions poweruptype, Transform DropLocation)
     {
         switch (poweruptype)
