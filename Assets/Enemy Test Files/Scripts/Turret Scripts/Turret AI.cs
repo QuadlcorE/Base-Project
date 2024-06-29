@@ -60,6 +60,7 @@ public class TurretAI : MonoBehaviour
 
     private void FiringState()
     {
+        turretController.TrackTarget(tracker);
         currentFiringTime += Time.deltaTime;
         turretController.firing = true;
         if (currentFiringTime >= firingTime)
