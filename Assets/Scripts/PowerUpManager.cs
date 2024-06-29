@@ -42,7 +42,7 @@ public class PowerUpManager : MonoBehaviour
         if (_selectedPowerUps == null || _selectedPowerUps.Count == 0)
         {
             Debug.LogWarning("No power-ups selected. Initializing with default power-ups.");
-            _selectedPowerUps = new List<string> { "Turret", "Canon", "Regen" }; // Add default power-ups
+            //_selectedPowerUps = new List<string> { "Turret", "Canon", "Regen" }; // Add default power-ups
         }
         _currentActivePowerUp = (Powerups)Enum.Parse(typeof(Powerups), _selectedPowerUps[0]);
         _currentPowerUpIndex = 0;
