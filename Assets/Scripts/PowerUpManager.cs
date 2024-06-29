@@ -33,7 +33,7 @@ public class PowerUpManager : MonoBehaviour
 
     public event Action<Powerups> OnPowerUpChanged;
 
-    [SerializeField] private TextMeshProUGUI _currentActivePowerUpText;
+    private TextMeshProUGUI _currentActivePowerUpText;
 
 
     void Awake()
