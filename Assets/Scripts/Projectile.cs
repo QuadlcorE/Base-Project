@@ -26,6 +26,8 @@ public class Projectile : MonoBehaviour
 
     private PowerUpManager _powerUpManager;
 
+    private Vector2 _direction;
+
     private void Start()
     {
         _powerUpManager = GameObject.Find("PowerUpManager").GetComponent<PowerUpManager>();
@@ -33,29 +35,30 @@ public class Projectile : MonoBehaviour
         FindPlayerController();
         SetInitialVelocity();
     }
-    /*
-     * 
-        public void Shoot(Vector2 shootDirection)
-        {
-            this.direction = shootDirection;
-            rb.velocity = this.direction * speed;
-        }
 
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if (collision.gameObject.CompareTag("Wall"))
-            {
-                var firstContact = collision.GetContact(0);
-                Vector2 newVelocity = Vector2.Reflect((_playerAiming.turn.x, _playerAiming.turn.y), firstContact.normal);
-                Shoot(newVelocity.normalized);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
+    public void Shoot(Vector2 shootDirection)
+    {
+        _direction = shootDirection;
+        Debug.Log(_rb.velocity);
+        _rb.velocity = _direction * _speed * Time.deltaTime;
+        Debug.Log(_rb.velocity);
+    }
 
-     */
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //if (collision.gameObject.CompareTag("Wall"))
+        //{
+        var firstContact = collision.GetContact(0);
+        Vector2 newVelocity = Vector2.Reflect(_direction, firstContact.normal);
+        Shoot(newVelocity.normalized);
+        //}
+        //else
+        //{
+        //Destroy(gameObject);
+        //}
+    }
+
 
 
 
@@ -89,7 +92,8 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private void SetInitialVelocity()
     {
-        Vector2 initialVelocity = new Vector2(_playerAiming.turn.x, _playerAiming.turn.y).normalized * _speed * Time.deltaTime;
+        _direction = new Vector2(_playerAiming.turn.x, _playerAiming.turn.y);
+        Vector2 initialVelocity = _direction.normalized * _speed * Time.deltaTime;
         _rb.velocity = initialVelocity;
     }
 
