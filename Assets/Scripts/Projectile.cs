@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -9,6 +10,11 @@ public class Projectile : MonoBehaviour
     protected float _speed;
 
     /// <summary>
+    /// Damage points.
+    /// </summary>
+    protected float damagePoints;
+
+    /// <summary>
     /// Projectile's Rigidbody2D component.
     /// </summary>
     private Rigidbody2D _rb;
@@ -16,14 +22,15 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Reference to the Player Controller component.
     /// </summary>
-    private PlayerController _playerController;
+    private PlayerAiming _playerAiming;
+
+    private PowerUpManager _powerUpManager;
 
     private void Start()
     {
+        _powerUpManager = GameObject.Find("PowerUpManager").GetComponent<PowerUpManager>();
         InitializeRigidbody2D();
-
         FindPlayerController();
-
         SetInitialVelocity();
     }
 
@@ -45,8 +52,8 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private void FindPlayerController()
     {
-        _playerController = FindObjectOfType<PlayerController>();
-        if (_playerController == null)
+        _playerAiming = FindObjectOfType<PlayerAiming>();
+        if (_playerAiming == null)
         {
             Debug.LogError("PlayerController is null");
             return;
@@ -58,18 +65,21 @@ public class Projectile : MonoBehaviour
     /// </summary>
     private void SetInitialVelocity()
     {
-        Vector2 initialVelocity = new Vector2(_playerController.turn.x, _playerController.turn.y).normalized * _speed * Time.deltaTime;
+        Vector2 initialVelocity = new Vector2(_playerAiming.turn.x, _playerAiming.turn.y).normalized * _speed * Time.deltaTime;
         _rb.velocity = initialVelocity;
     }
 
-    /*
-    private void OnCollisionEnter2D(Collision2D collision)
+    public float GetDamagePoints()
     {
-        // Reflect the projectile's velocity when it hits a wall
-        Vector2 normal = collision.GetContact(0).normal;
-        _rb.velocity = Vector2.Reflect(_rb.velocity, normal).normalized * _speed;
+        if (_powerUpManager != null)
+        {
+            PowerUpManager.Powerups currentPowerUp = _powerUpManager.GetCurrentActivePowerUp();
+            return (currentPowerUp == PowerUpManager.Powerups.Juggernaut) ? damagePoints / 2 : damagePoints;
+        }
+        else
+        {
+            Debug.LogError("_powerUpManager is null");
+            return 0;
+        }
     }
-    */
-
-
 }
