@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private GameObject _loserPanel;
+    [SerializeField] private GameObject _winnerPanel;
+
     private void Awake()
     {
         if (_instance == null)
@@ -42,6 +45,19 @@ public class GameManager : MonoBehaviour
         else if (_instance != this)
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            DebugLoss();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            DebugWin();
         }
     }
 
@@ -57,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     public void GoToNextScene()
@@ -75,5 +91,20 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerPrefs.DeleteAll();
+    }
+
+
+    ///
+    // handle loss
+    private void DebugLoss()
+    {
+        _loserPanel.SetActive(true);
+        _winnerPanel.SetActive(false);
+    }
+
+    private void DebugWin()
+    {
+        _winnerPanel.SetActive(true);
+        _loserPanel.SetActive(false);
     }
 }

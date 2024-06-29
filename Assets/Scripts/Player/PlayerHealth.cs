@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -24,15 +25,20 @@ public class PlayerHealth : MonoBehaviour
     /// Player's health regeneration rate( health per second)
     /// </summary>
     public float _regenRate;
-    
+
     public const int MaxHealth = 100;
-    
+
     private float _currentHealth;
+
+    [SerializeField] private Slider _slider;
 
     private void Awake()
     {
         _powerUpManager = GetComponent<PowerUpManager>();
+    }
 
+    private void Start()
+    {
         if (_powerUpManager != null)
         {
             _powerUpManager.OnPowerUpChanged += HandlePowerUpChanged;
@@ -76,6 +82,7 @@ public class PlayerHealth : MonoBehaviour
     private void RegenerateHealth()
     {
         _currentHealth += _regenRate * Time.deltaTime;
+        //OnHealthChanged?.Invoke(_currentHealth);
         if (_currentHealth > MaxHealth)
         {
             _currentHealth = MaxHealth;
