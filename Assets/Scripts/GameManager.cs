@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private GameObject _loserPanel;
+    [SerializeField] private GameObject _winnerPanel;
+
     private void Awake()
     {
         if (_instance == null)
@@ -45,6 +48,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            DebugLoss();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            DebugWin();
+        }
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1.0f;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
 
     public void GoToNextScene()
     {
@@ -52,8 +82,29 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(nextSceneIndex, LoadSceneMode.Single);
     }
 
+    public void QuitGame()
+    {
+        Time.timeScale = 1;
+        Application.Quit();
+    }
+
     private void OnDisable()
     {
         PlayerPrefs.DeleteAll();
+    }
+
+
+    ///
+    // handle loss
+    private void DebugLoss()
+    {
+        _loserPanel.SetActive(true);
+        _winnerPanel.SetActive(false);
+    }
+
+    private void DebugWin()
+    {
+        _winnerPanel.SetActive(true);
+        _loserPanel.SetActive(false);
     }
 }

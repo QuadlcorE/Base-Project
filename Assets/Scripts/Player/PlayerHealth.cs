@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -21,25 +23,29 @@ public class PlayerHealth : MonoBehaviour
     private PowerUpManager.Powerups _currentActivePowerup;
 
     /// <summary>
-    /// Player's health regeneration rate( health per second)
+    /// Player's health regeneration rate (health per second)
     /// </summary>
     public float _regenRate;
-    
-    public const int MaxHealth = 100;
-    
-    private float _currentHealth;
+
+    public readonly int MaxHealth = 100;
+
+    public float CurrentHealth { get; private set; }
+
 
     private void Awake()
     {
         _powerUpManager = GetComponent<PowerUpManager>();
+    }
 
+    private void Start()
+    {
         if (_powerUpManager != null)
         {
             _powerUpManager.OnPowerUpChanged += HandlePowerUpChanged;
         }
 
         _regenRate = 5;
-        _currentHealth = MaxHealth;
+        CurrentHealth = MaxHealth;
     }
 
 
@@ -75,10 +81,10 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void RegenerateHealth()
     {
-        _currentHealth += _regenRate * Time.deltaTime;
-        if (_currentHealth > MaxHealth)
+        CurrentHealth += _regenRate * Time.deltaTime;
+        if (CurrentHealth > MaxHealth)
         {
-            _currentHealth = MaxHealth;
+            CurrentHealth = MaxHealth;
         }
     }
 
@@ -88,11 +94,12 @@ public class PlayerHealth : MonoBehaviour
         {
             damage /= 2;
         }
-        _currentHealth -= damage;
+        CurrentHealth -= damage;
 
-        if (_currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
             // Handle player death
+            CurrentHealth = 0f;
             Debug.Log("Player died");
         }
     }
