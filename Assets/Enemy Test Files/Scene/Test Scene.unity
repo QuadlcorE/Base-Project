@@ -1499,6 +1499,10 @@ PrefabInstance:
       propertyPath: tracker
       value: 
       objectReference: {fileID: 1529028752}
+    - target: {fileID: 3162877849066852892, guid: 44e93ac3bcbda6540bfdceb076515f8b, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 6890392362467228246, guid: 7676154050e90be48a0e6625322855fc, type: 3}
     - target: {fileID: 6218238538888328560, guid: 44e93ac3bcbda6540bfdceb076515f8b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.81
