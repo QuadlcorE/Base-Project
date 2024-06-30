@@ -3,14 +3,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
     /// <summary>
     /// Reference to the powerup manager
     /// </summary>
     private PowerUpManager _powerUpManager;
 
-    [SerializeField] private HealthSlider _playerHealthSlider;
+    [SerializeField] private HealthSlider _enemyHealthSlider;
+
 
     private enum Powerups
     {
@@ -24,7 +25,7 @@ public class PlayerHealth : MonoBehaviour
     private PowerUpManager.Powerups _currentActivePowerup;
 
     /// <summary>
-    /// Player's health regeneration rate (health per second)
+    /// Enemy's health regeneration rate (health per second)
     /// </summary>
     private float _regenRate;
 
@@ -32,8 +33,7 @@ public class PlayerHealth : MonoBehaviour
 
     public float CurrentHealth { get; private set; }
 
-
-    public event Action OnPlayerLose;
+    public event Action OnEnemyLose;
 
 
     private void Awake()
@@ -55,8 +55,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Update()
     {
-        _playerHealthSlider.UpdateSlider((int)CurrentHealth);
-
+        _enemyHealthSlider.UpdateSlider((int)CurrentHealth);
         if (_currentActivePowerup == PowerUpManager.Powerups.Regen)
         {
             RegenerateHealth();
@@ -64,7 +63,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (CurrentHealth <= 0)
         {
-            OnPlayerLose?.Invoke();
+            OnEnemyLose?.Invoke();
         }
     }
 
@@ -90,7 +89,7 @@ public class PlayerHealth : MonoBehaviour
     /// <summary>
     /// Regenerates player health to max health when regen is activated. 
     /// </summary>
-    private void RegenerateHealth()
+    public void RegenerateHealth()
     {
         CurrentHealth += _regenRate * Time.deltaTime;
         if (CurrentHealth > MaxHealth)
@@ -99,7 +98,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    internal void TakeDamage(float damage)
     {
         if (_currentActivePowerup == PowerUpManager.Powerups.Juggernaut)
         {

@@ -117,16 +117,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7723464066772035333}
-  - component: {fileID: 7594979311046194926}
   - component: {fileID: -6996929575306597189}
-  - component: {fileID: 8282921736572881137}
-  - component: {fileID: 6446479449981858712}
-  - component: {fileID: 4637511170588764524}
   - component: {fileID: 4262296030429714229}
   - component: {fileID: 5407428689836312979}
-  - component: {fileID: 4457223899900475476}
+  - component: {fileID: 7607276776738671694}
+  - component: {fileID: 4158926413984850473}
+  - component: {fileID: 1885102574547169786}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,23 +147,6 @@ Transform:
   - {fileID: 7723464066183351784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7594979311046194926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7723464066772035330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 941e1bdb1e2144661bfb1887ee0e943d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spawnPoint: {fileID: 7723464066183351784}
-  _bullet: {fileID: 8051630211443881611, guid: 836a945abd520e34f965f2ea60ced30d, type: 3}
-  _turretBullet: {fileID: 6890392362467228246, guid: 7676154050e90be48a0e6625322855fc, type: 3}
-  _canon: {fileID: -3540864421195861911, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
-  _dropBox: {fileID: 2186645855720405215, guid: 3faaaa715cf93624cbd6a59388b28360, type: 3}
 --- !u!58 &-6996929575306597189
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -201,44 +182,6 @@ CircleCollider2D:
   m_Offset: {x: 0.0023035407, y: 0}
   serializedVersion: 2
   m_Radius: 0.58523136
---- !u!114 &8282921736572881137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7723464066772035330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fdba8ffc054474692513016b410d27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6446479449981858712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7723464066772035330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277c7052efd7bec429241cb89c63c6f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerHealthSlider: {fileID: 4457223899900475476}
---- !u!114 &4637511170588764524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7723464066772035330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8135f7b093afbd444b467e550ef0fa0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
 --- !u!114 &4262296030429714229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,7 +221,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4457223899900475476
+--- !u!114 &7607276776738671694
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,6 +235,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slider: {fileID: 0}
   _sliderText: {fileID: 0}
+--- !u!114 &4158926413984850473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7723464066772035330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dde06876fd16a3468844ee00284ad8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnPoint: {fileID: 7723464066183351784}
+  _bullet: {fileID: 8051630211443881611, guid: 836a945abd520e34f965f2ea60ced30d, type: 3}
+  _turretBullet: {fileID: 6890392362467228246, guid: 7676154050e90be48a0e6625322855fc, type: 3}
+  _canon: {fileID: -3540864421195861911, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
+  _dropBox: {fileID: 2186645855720405215, guid: 3faaaa715cf93624cbd6a59388b28360, type: 3}
+--- !u!114 &1885102574547169786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7723464066772035330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4af2cf40062764c98394fb74e848ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyHealthSlider: {fileID: 7607276776738671694}
 --- !u!1 &7723464066865418609
 GameObject:
   m_ObjectHideFlags: 0

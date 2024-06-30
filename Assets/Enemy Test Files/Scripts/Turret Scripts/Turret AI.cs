@@ -99,4 +99,9 @@ public class TurretAI : MonoBehaviour
                 break;
         }
     }
+
+    public void SetTracker(GameObject tk)
+    {
+        tracker = tk;
+    }
 }

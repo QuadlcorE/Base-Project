@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,8 +33,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private GameObject _loserPanel;
-    [SerializeField] private GameObject _winnerPanel;
+    private PlayerHealth _playerHealth;
+    private EnemyHealth _enemyHealth;
+
+    private UIManager _uiManager;
+
+
+    public void PlayerWon()
+    {
+        _uiManager.ShowWinnerPanel();
+    }
+
+    public void PlayerLost()
+    {
+        _uiManager.ShowLoserPanel();
+    }
 
     private void Awake()
     {
@@ -46,18 +60,23 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        _uiManager = FindObjectOfType<UIManager>();
+        _playerHealth = FindObjectOfType<PlayerHealth>();
+        _enemyHealth = FindObjectOfType<EnemyHealth>();
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        ResetWinLosePanels();
+        if (_playerHealth != null)
         {
-            DebugLoss();
+            _playerHealth.OnPlayerLose += HandlePlayerLose;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (_enemyHealth != null)
         {
-            DebugWin();
+            _enemyHealth.OnEnemyLose += HandleEnemyLose;
         }
     }
 
@@ -82,6 +101,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(nextSceneIndex, LoadSceneMode.Single);
     }
 
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     public void QuitGame()
     {
         Time.timeScale = 1;
@@ -91,20 +115,31 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerPrefs.DeleteAll();
+        _playerHealth.OnPlayerLose -= HandlePlayerLose;
+        _enemyHealth.OnEnemyLose -= HandleEnemyLose;
     }
 
-
-    ///
-    // handle loss
-    private void DebugLoss()
+    private void ResetWinLosePanels()
     {
-        _loserPanel.SetActive(true);
-        _winnerPanel.SetActive(false);
+        if (_uiManager != null)
+        {
+            _uiManager.ResetWinLosePanels();
+        }
     }
 
-    private void DebugWin()
+    private void HandlePlayerLose()
     {
-        _winnerPanel.SetActive(true);
-        _loserPanel.SetActive(false);
+        if (_uiManager != null)
+        {
+            _uiManager.HandlePlayerLose();
+        }
+    }
+
+    private void HandleEnemyLose()
+    {
+        if (_uiManager != null)
+        {
+            _uiManager.HandleEnemyLose();
+        }
     }
 }
