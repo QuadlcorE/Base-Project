@@ -6,7 +6,7 @@ public class RandomSCRIPT : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Something Entered");
+        //Debug.Log("Something Entered");
     }
     // Start is called before the first frame update
     void Start()

@@ -11,9 +11,9 @@ public class EventHandler : MonoBehaviour
     
     public IEnumerator StartChangeScene(float timeTillChange)
     {
-        Debug.Log("I was summoned");
+        //Debug.Log("I was summoned");
         yield return new WaitForSeconds(timeTillChange);
-        Debug.Log("And I ran");
+        //Debug.Log("And I ran");
         SceneManager.LoadScene(GameplayScene);
     }
 

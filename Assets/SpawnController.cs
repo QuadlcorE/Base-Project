@@ -19,8 +19,6 @@ public class SpawnController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("I ran ");
-        Debug.Log(collision.gameObject.tag);
         switch (collision.gameObject.tag)
         {
             case "Walls":
@@ -36,7 +34,7 @@ public class SpawnController : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.tag);
+        //Debug.Log(collision.gameObject.tag);
         switch (collision.gameObject.tag)
         {
             case "Walls":

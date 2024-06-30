@@ -91,4 +91,9 @@ public class CannonAI : MonoBehaviour
                 break;
         }
     }
+
+    public void SetTracker(GameObject tk)
+    {
+        tracker = tk;
+    }
 }

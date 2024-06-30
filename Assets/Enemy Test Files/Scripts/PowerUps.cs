@@ -14,35 +14,37 @@ public enum PowerUpDefinitions
 
 public class PowerUps : MonoBehaviour
 {
-    public static GameObject jaugernautPrefab;
-    public static GameObject cannonPrefab;
-    public static GameObject turretPrefab;
-    public static GameObject dropBoxPrefab;
-    public static GameObject regenPrefab;
+    //public GameObject jaugernautPrefab;
+    public CannonAI cannonPrefab;
+    public TurretAI turretPrefab;
+    //public GameObject dropBoxPrefab;
+    //public GameObject regenPrefab;
 
     public static float cannonCoolDownTime = 5f;
     public static float turretCoolDownTime = 5f;
     public static float dropBoxCoolDownTime = 5f;
     public static float regenCoolDownTime = 5f;
 
-    public static void activate(PowerUpDefinitions poweruptype, Transform DropLocation)
+    public void activate(PowerUpDefinitions poweruptype, Transform DropLocation, GameObject target)
     {
         switch (poweruptype)
         {
             case PowerUpDefinitions.Jaugernaut:
-                Instantiate(jaugernautPrefab, DropLocation.position, DropLocation.rotation);
+                // Instantiate(jaugernautPrefab, DropLocation.position, DropLocation.rotation);
                 break;
             case PowerUpDefinitions.Cannon:
-                Instantiate(cannonPrefab, DropLocation.position, DropLocation.rotation);
+                CannonAI newCanon = Instantiate(cannonPrefab, DropLocation.position, DropLocation.rotation);
+                newCanon.SetTracker(target);
                 break;
             case PowerUpDefinitions.Turret:
-                Instantiate(turretPrefab, DropLocation.position, DropLocation.rotation);
+                TurretAI newTurret = Instantiate(turretPrefab, DropLocation.position, DropLocation.rotation);
+                newTurret.SetTracker(target);
                 break;
             case PowerUpDefinitions.DropBox:
-                Instantiate(dropBoxPrefab, DropLocation.position, DropLocation.rotation);
+                //Instantiate(dropBoxPrefab, DropLocation.position, DropLocation.rotation);
                 break;
             case PowerUpDefinitions.Regen:
-                Instantiate(regenPrefab, DropLocation.position, DropLocation.rotation);
+                //Instantiate(regenPrefab, DropLocation.position, DropLocation.rotation);
                 break;
         }
 
