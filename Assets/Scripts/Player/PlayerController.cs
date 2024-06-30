@@ -4,7 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Bullet _bullet;
-    [SerializeField] private Turret _turret;
+    [SerializeField] private TurretBullet _turretBullet;
     [SerializeField] private Canon _canon;
     [SerializeField] private DropBox _dropBox;
 
@@ -55,7 +55,8 @@ public class PlayerController : MonoBehaviour
 
     private void FireBullet()
     {
-        Instantiate(_bullet, _spawnPoint.position, Quaternion.identity);
+        Bullet _bulletToFire = Instantiate(_bullet, _spawnPoint.position, Quaternion.identity);
+        _bulletToFire.Shoot(_playerAiming.turn);
     }
 
     private void UseActivePowerUp()
@@ -63,7 +64,8 @@ public class PlayerController : MonoBehaviour
         switch (_currentActivePowerUp)
         {
             case PowerUpManager.Powerups.Turret:
-                Instantiate(_turret, _spawnPoint.position, Quaternion.identity);
+                TurretBullet _firedBullet = Instantiate(_turretBullet, _spawnPoint.position, Quaternion.identity);
+                _firedBullet.Shoot(_playerAiming.turn);
                 break;
 
             case PowerUpManager.Powerups.Canon:

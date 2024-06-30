@@ -9,32 +9,21 @@ public class HealthSlider : MonoBehaviour
 {
     [SerializeField] private Slider _slider;
     [SerializeField] private TextMeshProUGUI _sliderText;
-    private PlayerHealth _playerHealth;
-
-    void Awake()
-    {
-        _playerHealth = GetComponent<PlayerHealth>();
-    }
 
     void Start()
     {
         InitializeSliderValues();
     }
 
-    void Update()
-    {
-        UpdateSlider();
-    }
-
     private void InitializeSliderValues()
     {
-        _slider.maxValue = _playerHealth.MaxHealth;
+        _slider.maxValue = 100;
         _slider.minValue = 0;
     }
 
-    private void UpdateSlider()
+    public void UpdateSlider(int _sliderValue)
     {
-        _slider.value = (int) _playerHealth.CurrentHealth;
+        _slider.value = _sliderValue;
         _sliderText.text = _slider.value.ToString();
     }
 }

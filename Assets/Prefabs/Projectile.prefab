@@ -99,8 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b699aea99c6db4b1da8d48fefd6ad985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canon: {fileID: -3540864421195861911, guid: 1cdcf07db50d5024985566a71eb75168, type: 3}
-  _turret: {fileID: 7061707425597494664, guid: 2b35cd5a1d52e4c4a8c4ea7e08a5dab7, type: 3}
+  rb: {fileID: 5408049222504872254}
+  life: 3
+  speed: 30
 --- !u!50 &5408049222504872254
 Rigidbody2D:
   serializedVersion: 4

@@ -2,8 +2,14 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Projectile : MonoBehaviour
 {
+    public Rigidbody2D rb;
+    public int life = 3;
+    public float speed = 30f;
+    private Vector2 direction;
+
     /// <summary>
     /// Projectile's speed.
     /// </summary>
@@ -26,39 +32,36 @@ public class Projectile : MonoBehaviour
 
     private PowerUpManager _powerUpManager;
 
-    private Vector2 _direction;
-
     private void Start()
     {
         _powerUpManager = GameObject.Find("PowerUpManager").GetComponent<PowerUpManager>();
         InitializeRigidbody2D();
         FindPlayerController();
-        SetInitialVelocity();
+        //SetInitialVelocity();
+
+        this.direction = direction;
+        Destroy(gameObject, 3f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        life--;
+        if (life < 0)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        var firstContact = collision.contacts[0];
+        Vector2 newVelocity = Vector2.Reflect(direction.normalized, firstContact.normal);
+        Shoot(newVelocity.normalized);
     }
 
     public void Shoot(Vector2 shootDirection)
     {
-        _direction = shootDirection;
-        Debug.Log(_rb.velocity);
-        _rb.velocity = _direction * _speed * Time.deltaTime;
-        Debug.Log(_rb.velocity);
+        this.direction = shootDirection;
+        rb.velocity = this.direction * speed;
     }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        //if (collision.gameObject.CompareTag("Wall"))
-        //{
-        var firstContact = collision.GetContact(0);
-        Vector2 newVelocity = Vector2.Reflect(_direction, firstContact.normal);
-        Shoot(newVelocity.normalized);
-        //}
-        //else
-        //{
-        //Destroy(gameObject);
-        //}
-    }
-
 
 
 
@@ -90,12 +93,12 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Set initial velocity of the projectile based on player direction
     /// </summary>
-    private void SetInitialVelocity()
+    /*private void SetInitialVelocity()
     {
         _direction = new Vector2(_playerAiming.turn.x, _playerAiming.turn.y);
         Vector2 initialVelocity = _direction.normalized * _speed * Time.deltaTime;
         _rb.velocity = initialVelocity;
-    }
+    }*/
 
     public float GetDamagePoints()
     {
