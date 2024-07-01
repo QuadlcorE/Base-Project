@@ -233,6 +233,7 @@ namespace Thirdweb.Examples
 
             onConnected.Invoke(_address);
             
+            
         }
 
         // Network switching
