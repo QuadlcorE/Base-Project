@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7510109068739442696}
   - component: {fileID: 2619731767035394947}
   m_Layer: 0
-  m_Name: Cannon
+  m_Name: Pre_Cannon
   m_TagString: Drops
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4142652331101662612}
   - component: {fileID: 8294235997784744504}
   m_Layer: 0
-  m_Name: SpawnChecker
+  m_Name: Pre_SpawnChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
